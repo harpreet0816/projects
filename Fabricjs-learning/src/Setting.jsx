@@ -71,6 +71,7 @@ const Setting = ({ canvas }) => {
 
     if (selectedObject && selectedObject.type === "rect") {
       selectedObject.set({ width: intValue / selectedObject.scaleX });
+      selectedObject.setCoords();
       canvas.renderAll();
     }
   };
@@ -80,9 +81,20 @@ const Setting = ({ canvas }) => {
     const intValue = parseInt(value, 10);
 
     setHeight(intValue);
-
+    // selectedObject.setControlsVisibility({
+    //   mt: true, // Top middle
+    //   mb: true, // Bottom middle
+    //   ml: true, // Left middle
+    //   mr: true, // Right middle
+    //   tl: true, // Top left
+    //   tr: true, // Top right
+    //   bl: true, // Bottom left
+    //   br: true, // Bottom right
+    //   mtr: true, // Rotate
+    // });
     if (selectedObject && selectedObject.type === "rect") {
       selectedObject.set({ height: intValue / selectedObject.scaleY });
+      selectedObject.setCoords();
       canvas.renderAll();
     }
   };
@@ -106,58 +118,81 @@ const Setting = ({ canvas }) => {
 
     if (selectedObject && selectedObject.type === "circle") {
       selectedObject.set({ radius: intValue / 2 / selectedObject.scaleX });
+      selectedObject.setCoords();
       canvas.renderAll();
     }
   };
+
+  if (!selectedObject) return;
+
   return (
-    <div style={{
-    position: 'fixed',
-    width: '500px',
-    top: '20px',
-    right: '0',
-    display: 'flex',
-    background: '#b7b7c7',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-}}>
-      {selectedObject && selectedObject.type === "rect" && (
+    <div className="basic-[500px] w-[500px] bg-gray-100 backdrop-blur-md shadow-lg rounded-lg p-4 border border-gray-300">
+      {selectedObject && (
         <>
-        <h2>Settings</h2>
-          <input
-            type="number"
-            aria-label="width"
-            value={width}
-            onChange={handleWidthChange}
-          />
-          <input
-            type="number"
-            aria-label="height"
-            value={height}
-            onChange={handleHeightChange}
-          />
-          <input
-            type="color"
-            aria-label="color"
-            value={color}
-            onChange={handleColorChange}
-          />
-        </>
-      )}
-      {selectedObject && selectedObject.type === "circle" && (
-        <>
-        <h2>Settings</h2>
-          <input
-            type="color"
-            aria-label="color"
-            value={color}
-            onChange={handleColorChange}
-          />
-          <input
-            type="number"
-            aria-label="diameter"
-            value={diameter}
-            onChange={handleDiameterChange}
-          />
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">Settings</h2>
+
+          {selectedObject.type === "rect" && (
+            <>
+              <label className="flex flex-col text-sm font-medium text-gray-600">
+                Width
+                <input
+                  type="number"
+                  aria-label="width"
+                  value={width}
+                  onChange={handleWidthChange}
+                  className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </label>
+
+              <label className="flex flex-col text-sm font-medium text-gray-600">
+                Height
+                <input
+                  type="number"
+                  aria-label="height"
+                  value={height}
+                  onChange={handleHeightChange}
+                  className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </label>
+
+              <label className="flex flex-col text-sm font-medium text-gray-600">
+                Color
+                <input
+                  type="color"
+                  aria-label="color"
+                  value={color}
+                  onChange={handleColorChange}
+                  className="mt-1 w-full h-10 cursor-pointer rounded-md border border-gray-300"
+                />
+              </label>
+            </>
+          )}
+
+          {selectedObject.type === "circle" && (
+            <>
+              <label className="flex flex-col text-sm font-medium text-gray-600">
+                Color
+                <input
+                  type="color"
+                  aria-label="color"
+                  value={color}
+                  onChange={handleColorChange}
+                  className="mt-1 w-full h-10 cursor-pointer rounded-md border border-gray-300"
+                />
+              </label>
+
+              <label className="flex flex-col text-sm font-medium text-gray-600">
+                Diameter
+                <input
+                  type="number"
+                  aria-label="diameter"
+                  value={diameter}
+                  onChange={handleDiameterChange}
+                  className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </label>
+            </>
+          )}
         </>
       )}
     </div>
